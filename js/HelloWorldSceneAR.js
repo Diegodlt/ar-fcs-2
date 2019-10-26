@@ -7,7 +7,16 @@ import {StyleSheet} from 'react-native';
 import {
   ViroARScene,
   ViroText,
+  ViroARImageMaker,
+  ViroBox,
+  ViroMaterials,
+  ViroGeometry,
   ViroConstants,
+  ViroARTrackingTargets,
+  ViroARImageMarker,
+  ViroPolygon,
+  ViroImage,
+  ViroAnimations
 } from 'react-viro';
 
 export default class HelloWorldSceneAR extends Component {
@@ -17,7 +26,7 @@ export default class HelloWorldSceneAR extends Component {
 
     // Set initial state here
     this.state = {
-      text : "Initializing AR..."
+      text : "Working"
     };
 
     // bind 'this' to functions
@@ -27,7 +36,14 @@ export default class HelloWorldSceneAR extends Component {
   render() {
     return (
       <ViroARScene onTrackingUpdated={this._onInitialized} >
-        <ViroText text={this.state.text} scale={[.5, .5, .5]} position={[0, 0, -1]} style={styles.helloWorldTextStyle} />
+        <ViroText 
+          text="Go team!"
+          scale={[.5, .5, .5]} 
+          position={[0, 1.5, -5]} 
+          style={styles.helloWorldTextStyle} />
+        <ViroBox position={[0, 0, -10]} scale={[.5,.5,.2]} materials={"redArrow"} />
+        <ViroBox position={[1, 0, -8]} scale={[.5,.5,.2]} materials={"redArrow"} />
+        <ViroBox position={[-2, 0, -5]} scale={[.5,.5,.2]} materials={"redArrow"}/>
       </ViroARScene>
     );
   }
@@ -43,10 +59,31 @@ export default class HelloWorldSceneAR extends Component {
   }
 }
 
+ViroMaterials.createMaterials({
+  yellowArrow: {
+    diffuseTexture: require('./res/yellow-curved.png'),
+  },
+  redArrow:{
+    diffuseTexture: require('./res/red-arrow.png')
+  }
+})
+
+ViroAnimations.registerAnimations({
+  loopRotate:{properties:{rotateY:"+=45"}, duration:1000}
+});
+
+ViroARTrackingTargets.createTargets({
+  "targetOne" : {
+    source : require('./res/22.jpg'),
+    orientation : "Up",
+    physicalWidth : 0.1 // real world width in meters
+  },
+});
+
 var styles = StyleSheet.create({
   helloWorldTextStyle: {
     fontFamily: 'Arial',
-    fontSize: 30,
+    fontSize: 60,
     color: '#ffffff',
     textAlignVertical: 'center',
     textAlign: 'center',  
